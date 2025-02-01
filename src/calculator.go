@@ -10,6 +10,15 @@ type Calculator struct {
 	operands Stack
 }
 
+type Operator int
+
+const  (
+  MultOperator Operator = 42
+  SumOperator Operator = 43
+  SubOperator Operator = 45
+  DivOperator Operator = 47
+)
+
 func (c *Calculator) sum(a float64, b float64) (v float64) {
 	v = a + b
 	return v
@@ -43,22 +52,25 @@ func (c *Calculator) Parse(t string) (float64) {
 
 		if t[i] != ' ' {
 
-      if t[i] == 42 || t[i] == 43 || t[i] == 45 || t[i] == 47 {
+      if (t[i] == byte(MultOperator) ||
+          t[i] == byte(SumOperator) ||
+          t[i] == byte(SubOperator) || 
+          t[i] == byte(DivOperator)) {
 
         left, _ := c.operands.Pop()
         right, _ := c.operands.Pop()
 
         switch t[i] {
-        case 42:
+        case byte(MultOperator):
           value := c.mult(right, left)
           c.operands.Push(value)
-        case 43:
+        case byte(SumOperator):
           value := c.sum(right, left)
           c.operands.Push(value)
-        case 45:
+        case byte(SubOperator):
           value := c.sub(right, left)
           c.operands.Push(value)
-        case 47:
+        case byte(DivOperator):
           value := c.div(right, left)
           c.operands.Push(value)
         }
